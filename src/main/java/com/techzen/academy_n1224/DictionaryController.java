@@ -19,18 +19,12 @@ public class DictionaryController {
             Map.entry("goodbye", "Tạm biệt"),
             Map.entry("thank you", "Cảm ơn")
     );
-    private final StandardServletMultipartResolver standardServletMultipartResolver;
 
-    public DictionaryController(StandardServletMultipartResolver standardServletMultipartResolver) {
-        this.standardServletMultipartResolver = standardServletMultipartResolver;
-    }
+
 
     @GetMapping("/dictionary")
     public ResponseEntity<String> getDictionary(@RequestParam(defaultValue = "") String word) {
         String result = dictionary.get(word.trim().toLowerCase());
-
-        System.out.println(word);
-        System.out.println(result);
 
         if (result == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("khong co trong tu dien");

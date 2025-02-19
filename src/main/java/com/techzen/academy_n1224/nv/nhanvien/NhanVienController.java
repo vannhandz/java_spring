@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@RequestMapping("/nhanvien")
 public class NhanVienController {
 
     private List<NhanVien> nhanviens = new ArrayList<>(
@@ -23,13 +24,13 @@ public class NhanVienController {
 
             )
     );
-    @GetMapping("/nhanvien")
+    @GetMapping()
     public ResponseEntity<List<NhanVien>> getAllNhanvien() {
         return ResponseEntity.ok(nhanviens);
     }
 
-    // ưu tiên dùng
-    @GetMapping("/nhanvien/{id}")
+
+    @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<NhanVien>> getNhanvien(@PathVariable("id") int id) {
 
         for (NhanVien nv : nhanviens) {
@@ -40,14 +41,14 @@ public class NhanVienController {
         throw new ApiException(ErrorCode.NhanVien_NOT_EXIST);
     }
 
-    @PostMapping("/nhanvien/add")
+    @PostMapping("/add")
     public ResponseEntity<ApiResponse<NhanVien>> addNhanvien(@RequestBody NhanVien nhanvien) {
         nhanvien.setId(nhanviens.size()+1);
         nhanviens.add(nhanvien);
         return ResponseEntity.ok(ApiResponse.<NhanVien>builder().data(nhanvien).build());
     }
 
-    @PutMapping("/nhanvien/upd/id={id}")
+    @PutMapping("upd/{id}")
         public ResponseEntity<ApiResponse<NhanVien>> updNhanvien(@RequestBody NhanVien nhanvien,
                                                       @PathVariable("id") int id) {
         for (NhanVien nv : nhanviens) {
@@ -63,7 +64,7 @@ public class NhanVienController {
         throw new ApiException(ErrorCode.NhanVien_NOT_EXIST);
     }
 
-    @DeleteMapping("/nhanvien/del/id={id}")
+    @DeleteMapping("/del/{id}")
     public ResponseEntity<ApiResponse<NhanVien>> deleteNhanvien(@PathVariable("id") int id) {
         for (NhanVien nv : nhanviens) {
             if (nv.getId()==id) {
