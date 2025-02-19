@@ -1,6 +1,9 @@
-package nhanvien;
+package com.techzen.academy_n1224.nhanvien;
 
-import org.springframework.http.HttpStatus;
+import com.techzen.academy_n1224.en.ApiResponse;
+import com.techzen.academy_n1224.en.ApiException;
+import com.techzen.academy_n1224.en.ErrorCode;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +17,7 @@ public class NhanVienController {
 
     private List<NhanVien> nhanviens = new ArrayList<>(
             Arrays.asList(
-                    new NhanVien(1,"van nhan", LocalDate.of(2003,10,03),"nam",5000.000,"0762605901"),
+                    new NhanVien(1,"van nhan", LocalDate.of(2003,10,3),"nam",5000.000,"0762605901"),
                     new NhanVien(2,"anh tu", LocalDate.of(2003,10,20),"nam",5000.000,"0762605902"),
                     new NhanVien(3,"van tuan", LocalDate.of(2003,6,19),"nam",5000.000,"0762605903")
 
@@ -24,28 +27,28 @@ public class NhanVienController {
     public ResponseEntity<List<NhanVien>> getAllNhanvien() {
         return ResponseEntity.ok(nhanviens);
     }
-    @GetMapping("/nhanvien/id={id}")
-    public ResponseEntity<List<NhanVien>> getNhanvien(@PathVariable("id") int id) {
 
-        List<NhanVien> nhanvien=new ArrayList<>();
+    // ưu tiên dùng
+    @GetMapping("/nhanvien/{id}")
+    public ResponseEntity<ApiResponse<NhanVien>> getNhanvien(@PathVariable("id") int id) {
+
         for (NhanVien nv : nhanviens) {
             if (nv.getId()==id) {
-                nhanvien.add(nv);
-                return ResponseEntity.ok(nhanvien);
+                return ResponseEntity.ok(ApiResponse.<NhanVien>builder().data(nv).build());
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        throw new ApiException(ErrorCode.NhanVien_NOT_EXIST);
     }
 
     @PostMapping("/nhanvien/add")
-    public ResponseEntity<List<NhanVien>> addNhanvien(@RequestBody NhanVien nhanvien) {
+    public ResponseEntity<ApiResponse<NhanVien>> addNhanvien(@RequestBody NhanVien nhanvien) {
         nhanvien.setId(nhanviens.size()+1);
         nhanviens.add(nhanvien);
-        return ResponseEntity.ok(nhanviens);
+        return ResponseEntity.ok(ApiResponse.<NhanVien>builder().data(nhanvien).build());
     }
 
     @PutMapping("/nhanvien/upd/id={id}")
-    public ResponseEntity<List<NhanVien>> updNhanvien(@RequestBody NhanVien nhanvien,
+        public ResponseEntity<ApiResponse<NhanVien>> updNhanvien(@RequestBody NhanVien nhanvien,
                                                       @PathVariable("id") int id) {
         for (NhanVien nv : nhanviens) {
             if (nv.getId()==id) {
@@ -54,21 +57,22 @@ public class NhanVienController {
                 nv.setGender(nhanvien.getGender());
                 nv.setSalary(nhanvien.getSalary());
                 nv.setPhone(nhanvien.getPhone());
-                return ResponseEntity.ok(nhanviens);
+                return ResponseEntity.ok( ApiResponse.<NhanVien>builder().data(nhanvien).build());
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        throw new ApiException(ErrorCode.NhanVien_NOT_EXIST);
     }
 
     @DeleteMapping("/nhanvien/del/id={id}")
-    public ResponseEntity<List<NhanVien>> deleteNhanvien(@PathVariable("id") int id) {
+    public ResponseEntity<ApiResponse<NhanVien>> deleteNhanvien(@PathVariable("id") int id) {
         for (NhanVien nv : nhanviens) {
             if (nv.getId()==id) {
                 nhanviens.remove(nv);
-                return ResponseEntity.ok(nhanviens);
+                return ResponseEntity.ok( ApiResponse.<NhanVien>builder().data(nv).build());
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        throw new ApiException(ErrorCode.NhanVien_NOT_EXIST);
     }
 
 
