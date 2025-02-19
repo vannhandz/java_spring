@@ -1,4 +1,4 @@
-package com.techzen.academy_n1224.nhanvien;
+package com.techzen.academy_n1224.nv.nhanvien;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

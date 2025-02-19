@@ -1,8 +1,8 @@
-package com.techzen.academy_n1224.nhanvien;
+package com.techzen.academy_n1224.nv.nhanvien;
 
-import com.techzen.academy_n1224.en.ApiResponse;
-import com.techzen.academy_n1224.en.ApiException;
-import com.techzen.academy_n1224.en.ErrorCode;
+import com.techzen.academy_n1224.nv.en.ApiResponse;
+import com.techzen.academy_n1224.nv.en.ApiException;
+import com.techzen.academy_n1224.nv.en.ErrorCode;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

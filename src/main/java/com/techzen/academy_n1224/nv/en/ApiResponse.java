@@ -1,4 +1,4 @@
-package com.techzen.academy_n1224.en;
+package com.techzen.academy_n1224.nv.en;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
