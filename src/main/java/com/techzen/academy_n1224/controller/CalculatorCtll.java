@@ -1,4 +1,4 @@
-package com.techzen.academy_n1224;
+package com.techzen.academy_n1224.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

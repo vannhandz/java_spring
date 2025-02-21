@@ -1,4 +1,4 @@
-package com.techzen.academy_n1224.nv.employees;
+package com.techzen.academy_n1224.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,8 +8,11 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Builder
-public class Department {
-    int id;
-    String name;
+
+public class Student {
+    private int id;
+    private String name;
+    private int score;
+
+
 }

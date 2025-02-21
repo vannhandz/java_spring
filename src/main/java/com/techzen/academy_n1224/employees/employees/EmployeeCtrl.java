@@ -1,9 +1,10 @@
-package com.techzen.academy_n1224.nv.employees;
+package com.techzen.academy_n1224.employees.employees;
 
-import com.techzen.academy_n1224.nv.en.ApiResponse;
-import com.techzen.academy_n1224.nv.en.ApiException;
-import com.techzen.academy_n1224.nv.en.ErrorCode;
+import com.techzen.academy_n1224.employees.en.ApiResponse;
+import com.techzen.academy_n1224.employees.en.ApiException;
+import com.techzen.academy_n1224.employees.en.ErrorCode;
 
+import com.techzen.academy_n1224.employees.en.JsonResponse;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -58,7 +58,7 @@ public class EmployeeCtrl {
                 })
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(listEmployees);
+        return JsonResponse.ok(listEmployees);
     }
 
     @GetMapping("/{id}")
