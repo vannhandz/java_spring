@@ -1,4 +1,4 @@
-package com.techzen.academy_n1224.nv.nhanvien;
+package com.techzen.academy_n1224.nv.employees;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,11 +10,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NhanVien {
+public class Employee {
      int id;
      String name;
-     LocalDate bỉth;
+     LocalDate birth;
      String gender;
      Double salary;
      String phone;
+     Integer departmentId;
 }
