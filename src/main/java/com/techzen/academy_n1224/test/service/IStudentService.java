@@ -1,6 +1,6 @@
-package com.techzen.academy_n1224.service;
+package com.techzen.academy_n1224.test.service;
 
-import com.techzen.academy_n1224.model.Student;
+import com.techzen.academy_n1224.test.model.Student;
 
 import java.util.List;
 

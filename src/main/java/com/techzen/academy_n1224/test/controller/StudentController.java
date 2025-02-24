@@ -1,10 +1,10 @@
-package com.techzen.academy_n1224.controller;
+package com.techzen.academy_n1224.test.controller;
 
 import com.techzen.academy_n1224.employees.en.ApiException;
 import com.techzen.academy_n1224.employees.en.ApiResponse;
 import com.techzen.academy_n1224.employees.en.ErrorCode;
-import com.techzen.academy_n1224.model.Student;
-import com.techzen.academy_n1224.service.IStudentService;
+import com.techzen.academy_n1224.test.model.Student;
+import com.techzen.academy_n1224.test.service.IStudentService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

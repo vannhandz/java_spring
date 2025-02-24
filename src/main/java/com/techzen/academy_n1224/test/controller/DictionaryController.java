@@ -1,4 +1,4 @@
-package com.techzen.academy_n1224.controller;
+package com.techzen.academy_n1224.test.controller;
 
 
 import org.springframework.http.HttpStatus;

@@ -1,9 +1,9 @@
-package com.techzen.academy_n1224.repository.impl;
+package com.techzen.academy_n1224.test.repository.impl;
 
 import com.techzen.academy_n1224.employees.en.ApiException;
 import com.techzen.academy_n1224.employees.en.ErrorCode;
-import com.techzen.academy_n1224.model.Student;
-import com.techzen.academy_n1224.repository.IStudentRepository;
+import com.techzen.academy_n1224.test.model.Student;
+import com.techzen.academy_n1224.test.repository.IStudentRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

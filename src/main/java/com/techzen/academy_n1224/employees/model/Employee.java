@@ -1,4 +1,4 @@
-package com.techzen.academy_n1224.employees.employees;
+package com.techzen.academy_n1224.employees.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

@@ -1,8 +1,8 @@
-package com.techzen.academy_n1224.service.impl;
+package com.techzen.academy_n1224.test.service.impl;
 
-import com.techzen.academy_n1224.model.Student;
-import com.techzen.academy_n1224.repository.IStudentRepository;
-import com.techzen.academy_n1224.service.IStudentService;
+import com.techzen.academy_n1224.test.model.Student;
+import com.techzen.academy_n1224.test.repository.IStudentRepository;
+import com.techzen.academy_n1224.test.service.IStudentService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
