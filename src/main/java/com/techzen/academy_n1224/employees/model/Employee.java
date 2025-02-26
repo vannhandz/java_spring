@@ -4,9 +4,11 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -18,4 +20,6 @@ public class Employee {
      Double salary;
      String phone;
      Integer departmentId;
+
+
 }

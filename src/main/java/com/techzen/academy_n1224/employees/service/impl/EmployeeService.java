@@ -24,7 +24,7 @@ public class EmployeeService implements IEmployeeService {
         return employeeRepository.finAttributes(employeeSearchRequest);
     }
 
-    public Optional<Employee> findById(int id) {
+    public Employee findById(int id) {
         return employeeRepository.findById(id);
     }
 
@@ -32,8 +32,8 @@ public class EmployeeService implements IEmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public void deleteEmployees(int id) {
-        employeeRepository.deleteEmployees(id);
+    public Employee deleteEmployees(int id) {
+      return   employeeRepository.deleteEmployees(id);
     }
 
 

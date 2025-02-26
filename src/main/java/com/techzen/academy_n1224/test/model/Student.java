@@ -7,12 +7,13 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
 public class Student {
     private int id;
     private String name;
-    private int score;
+    private Double score;
 
 
 }

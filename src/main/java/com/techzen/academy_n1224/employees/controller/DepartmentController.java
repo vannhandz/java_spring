@@ -22,7 +22,7 @@ public class DepartmentController {
 
     @GetMapping()
     private ResponseEntity<?> getAll() {
-        return JsonResponse.ok(departmentService);
+        return JsonResponse.ok(departmentService.getAll());
     }
 
     @GetMapping("/get/{id}")

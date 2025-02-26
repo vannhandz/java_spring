@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface IDepartmentService {
     public List<?> getAll();
 
-    public Optional<Department> findById(int id);
+    public Department findById(int id);
 
     public Department save(Department department);
 
-    public void delete(int id);
+    public Department delete(int id);
 }

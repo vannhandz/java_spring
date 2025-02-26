@@ -5,20 +5,15 @@ import com.techzen.academy_n1224.employees.model.Employee;
 import com.techzen.academy_n1224.employees.repository.IEmployeeRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
 public class EmployeeRepository implements IEmployeeRepository {
 
-    private final List<Employee> employees = new ArrayList<>(
-            Arrays.asList(
-                    new Employee(1, "van nhan", LocalDate.of(2003, 10, 3), "nam", 5000000.0, "0762605901", 1),
-                    new Employee(2, "anh tu", LocalDate.of(2003, 10, 20), "nam", 15000000.0, "0762605902", 2),
-                    new Employee(3, "tuan", LocalDate.of(2003, 6, 19), "nu", 25000000.0, "0762605903", 3)
-            )
-    );
+    private final List<Employee> employees = new ArrayList<>();
 
     public List<?> finAttributes(EmployeeSearchRequest employeeSearchRequest) {
 
@@ -45,34 +40,78 @@ public class EmployeeRepository implements IEmployeeRepository {
                 .collect(Collectors.toList());
     }
 
-    public Optional<Employee> findById(int id) {
-        return employees.stream()
-                .filter(e -> e.getId() == id)
-                .findFirst();
+    public Employee findById(int id) {
+        try {
+            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("SELECT * FROM employee WHERE id_employee = ?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                return Employee.builder()
+                        .id(rs.getInt("id_employee"))
+                        .name(rs.getString("name"))
+                        .birth(rs.getDate("birth").toLocalDate())
+                        .gender(rs.getString("gender"))
+                        .salary(rs.getDouble("salary"))
+                        .phone(rs.getString("phone"))
+                        .departmentId(rs.getInt("id_department"))
+                        .build();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     public Employee save(Employee employee) {
-        return findById(employee.getId())
-                .map(e -> {
-                    e.setName(employee.getName());
-                    e.setBirth(employee.getBirth());
-                    e.setGender(employee.getGender());
-                    e.setSalary(employee.getSalary());
-                    e.setPhone(employee.getPhone());
-                    return e;
-                })
-                .orElseGet(() -> {
-                    employee.setId(employees.size() + 1);
-                    employees.add(employee);
-                    return employee;
-                });
+        if (findById(employee.getId()) == null) {
+            try {
+                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("insert into employee(name, birth, gender, salary, phone, id_department)values(?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, employee.getName());
+                ps.setDate(2, Date.valueOf(employee.getBirth()));
+                ps.setString(3, employee.getGender());
+                ps.setDouble(4, employee.getSalary());
+                ps.setString(5, employee.getPhone());
+                ps.setInt(6, employee.getDepartmentId());
+                ps.executeUpdate();
+
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    employee.setId(rs.getInt(1));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            try {
+                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("update  employee set name=? , birth=?, gender=?, salary=?, phone=?, id_department=? where id_employee=?");
+                ps.setString(1, employee.getName());
+                ps.setDate(2, Date.valueOf(employee.getBirth()));
+                ps.setString(3, employee.getGender());
+                ps.setDouble(4, employee.getSalary());
+                ps.setString(5, employee.getPhone());
+                ps.setInt(6, employee.getDepartmentId());
+                ps.setInt(7, employee.getId());
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return null;
     }
 
-    public void deleteEmployees(int id) {
-        findById(id)
-                .map(e -> {
-                    employees.remove(e);
-                    return e;
-                });
+    public Employee deleteEmployees(int id) {
+        Employee employee = findById(id);
+        if (employee != null) {
+            try {
+                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("delete from employee where id_employee = ?");
+                ps.setInt(1, id);
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return employee;
+        }
+        return null;
     }
 }

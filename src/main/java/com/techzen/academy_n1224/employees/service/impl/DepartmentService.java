@@ -27,7 +27,7 @@ public class DepartmentService implements IDepartmentService {
         return departmentRepository.getAll();
     }
 
-    public Optional<Department> findById(int id) {
+    public Department findById(int id) {
         return departmentRepository.findById(id);
     }
 
@@ -35,8 +35,8 @@ public class DepartmentService implements IDepartmentService {
         return departmentRepository.save(department);
     }
 
-    public void delete(int id) {
-        departmentRepository.delete(id);
+    public Department delete(int id) {
+        return  departmentRepository.delete(id);
     }
 
 }

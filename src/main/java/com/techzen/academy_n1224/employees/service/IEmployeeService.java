@@ -10,11 +10,11 @@ public interface IEmployeeService {
 
     public List<?> finAttributes(EmployeeSearchRequest employeeSearchRequest);
 
-    public Optional<Employee> findById(int id);
+    public Employee findById(int id);
 
     public Employee save(Employee employee);
 
-    public void deleteEmployees(int id);
+    public Employee deleteEmployees(int id);
 
 
 }
