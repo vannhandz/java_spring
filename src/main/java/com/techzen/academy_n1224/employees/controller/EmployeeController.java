@@ -1,5 +1,7 @@
 package com.techzen.academy_n1224.employees.controller;
 import com.techzen.academy_n1224.employees.dto.EmployeeSearchRequest;
+import com.techzen.academy_n1224.employees.en.ApiException;
+import com.techzen.academy_n1224.employees.en.ErrorCode;
 import com.techzen.academy_n1224.employees.en.JsonResponse;
 import com.techzen.academy_n1224.employees.model.Employee;
 import com.techzen.academy_n1224.employees.service.IEmployeeService;
@@ -24,24 +26,32 @@ public class EmployeeController  {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getEmployees(@PathVariable("id") int id) {
+        if(employeeService.findById(id) == null) {
+            throw new ApiException(ErrorCode.Employees_NOT_EXIST);
+        }
         return JsonResponse.ok(employeeService.findById(id));
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<?> addEmployees(@RequestBody Employee employee) {
        return JsonResponse.created(employeeService.save(employee));
     }
 
-    @PutMapping("upd/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updEmployees(@RequestBody Employee employee,
                                           @PathVariable("id") int id) {
-
+        if(employeeService.findById(id) == null) {
+            throw new ApiException(ErrorCode.Employees_NOT_EXIST);
+        }
         employee.setId(id);
         return JsonResponse.ok(employeeService.save(employee));
     }
 
-    @DeleteMapping("/del/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<?> deleteEmployees(@PathVariable("id") int id) {
+        if(employeeService.findById(id) == null) {
+            throw new ApiException(ErrorCode.Employees_NOT_EXIST);
+        }
         employeeService.deleteEmployees(id);
         return JsonResponse.noContent();
     }

@@ -1,4 +1,5 @@
-package com.techzen.academy_n1224.employees.model;
+package com.techzen.academy_n1224.test.model;
+
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,13 +13,12 @@ import javax.persistence.Id;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-
-public class Department {
+public class Clazz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-    String name;
+    private int id;
+    private String name;
 }

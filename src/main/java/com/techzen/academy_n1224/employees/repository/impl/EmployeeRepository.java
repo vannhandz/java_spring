@@ -3,6 +3,10 @@ package com.techzen.academy_n1224.employees.repository.impl;
 import com.techzen.academy_n1224.employees.dto.EmployeeSearchRequest;
 import com.techzen.academy_n1224.employees.model.Employee;
 import com.techzen.academy_n1224.employees.repository.IEmployeeRepository;
+import com.techzen.academy_n1224.test.model.Student;
+import com.techzen.academy_n1224.test.repository.impl.ConnectionUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -23,7 +27,7 @@ public class EmployeeRepository implements IEmployeeRepository {
                 .filter(e -> (employeeSearchRequest.getDobTo() == null || !e.getBirth().isAfter(employeeSearchRequest.getDobTo())))
                 .filter(e -> (employeeSearchRequest.getGender() == null || e.getGender().equals(employeeSearchRequest.getGender())))
                 .filter(e -> (employeeSearchRequest.getPhone() == null || e.getPhone().contains(employeeSearchRequest.getPhone())))
-                .filter(e -> (employeeSearchRequest.getDepartmentId() == null || Objects.equals(e.getDepartmentId(), employeeSearchRequest.getDepartmentId())))
+//                .filter(e -> (employeeSearchRequest.getDepartmentId() == null || Objects.equals(e.getDepartmentId(), employeeSearchRequest.getDepartmentId())))
                 .filter(e -> {
 
                     if (employeeSearchRequest.getSalaryRange() == null) {
@@ -41,76 +45,49 @@ public class EmployeeRepository implements IEmployeeRepository {
     }
 
     public Employee findById(int id) {
+        Session session = ConnectionUtil.sessionFactory.openSession();
+        Employee employee = null;
         try {
-            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("SELECT * FROM employee WHERE id_employee = ?");
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                return Employee.builder()
-                        .id(rs.getInt("id_employee"))
-                        .name(rs.getString("name"))
-                        .birth(rs.getDate("birth").toLocalDate())
-                        .gender(rs.getString("gender"))
-                        .salary(rs.getDouble("salary"))
-                        .phone(rs.getString("phone"))
-                        .departmentId(rs.getInt("id_department"))
-                        .build();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            employee = (Employee) session.createQuery("FROM Employee WHERE id =:id ")
+                    .setParameter("id" ,id)
+                    .uniqueResult();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
         }
-        return null;
+        return employee;
     }
 
     public Employee save(Employee employee) {
-        if (findById(employee.getId()) == null) {
-            try {
-                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("insert into employee(name, birth, gender, salary, phone, id_department)values(?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, employee.getName());
-                ps.setDate(2, Date.valueOf(employee.getBirth()));
-                ps.setString(3, employee.getGender());
-                ps.setDouble(4, employee.getSalary());
-                ps.setString(5, employee.getPhone());
-                ps.setInt(6, employee.getDepartmentId());
-                ps.executeUpdate();
-
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    employee.setId(rs.getInt(1));
+        try(Session session = ConnectionUtil.sessionFactory.openSession()){
+            Transaction transaction = session.beginTransaction();
+            try{
+                session.saveOrUpdate(employee);
+                transaction.commit();
+            }catch (Exception e){
+                if(transaction!=null){
+                    transaction.rollback();
                 }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            try {
-                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("update  employee set name=? , birth=?, gender=?, salary=?, phone=?, id_department=? where id_employee=?");
-                ps.setString(1, employee.getName());
-                ps.setDate(2, Date.valueOf(employee.getBirth()));
-                ps.setString(3, employee.getGender());
-                ps.setDouble(4, employee.getSalary());
-                ps.setString(5, employee.getPhone());
-                ps.setInt(6, employee.getDepartmentId());
-                ps.setInt(7, employee.getId());
-                ps.executeUpdate();
-            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-        return null;
+        return employee;
     }
 
     public Employee deleteEmployees(int id) {
         Employee employee = findById(id);
-        if (employee != null) {
+        try (Session session = ConnectionUtil.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
             try {
-                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("delete from employee where id_employee = ?");
-                ps.setInt(1, id);
-                ps.executeUpdate();
-            } catch (SQLException e) {
+                session.delete(employee);
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
                 throw new RuntimeException(e);
             }
-            return employee;
         }
         return null;
     }

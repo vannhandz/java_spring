@@ -14,20 +14,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping()
 @RequiredArgsConstructor
 @Scope("singleton")
+@RequestMapping("/student")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class StudentController {
 
     IStudentService studentService ;
 
-    @GetMapping("/student")
+    @GetMapping()
     public ResponseEntity<?> getStudents(@RequestParam(defaultValue = "") String name) {
+        if (name == null) {
+            throw  new ApiException(ErrorCode.Employees_NOT_EXIST);
+        }
         return ResponseEntity.ok(ApiResponse.builder().
                 data(studentService.findByName(name)).build());
     }
-    @GetMapping("/student/{id}")
+
+    @GetMapping("/{id}")
     public ResponseEntity<?> getStudentsId(@PathVariable("id") int id) {
         Student student = studentService.findById(id);
         if (student == null) {
@@ -37,20 +41,24 @@ public class StudentController {
                 data(student).build());
     }
 
-    @PostMapping("/addst")
+    @PostMapping()
     public ResponseEntity<Student> add(@RequestBody Student student) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(studentService.create(student));
     }
 
-    @PutMapping("/updst/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Student> upd(@PathVariable("id") int id,
                                        @RequestBody Student student) {
+        if(studentService.findById(id) == null) {
+            throw  new ApiException(ErrorCode.Employees_NOT_EXIST);
+        }
+
         student.setId(id);
         return ResponseEntity.ok(studentService.create(student));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Student> del(@PathVariable("id") int id) {
         studentService.delete(id);
         return ResponseEntity.noContent().build();

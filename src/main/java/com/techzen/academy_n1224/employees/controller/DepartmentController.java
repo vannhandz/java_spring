@@ -25,25 +25,34 @@ public class DepartmentController {
         return JsonResponse.ok(departmentService.getAll());
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     private ResponseEntity<?> getID(@PathVariable("id") int id) {
+        if(departmentService.findById(id)==null){
+            throw new ApiException(ErrorCode.Department_NOT_EXIST);
+        }
         return JsonResponse.ok(departmentService.findById(id));
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     private ResponseEntity<?> create(@RequestBody Department department) {
         return JsonResponse.created(departmentService.save(department));
     }
 
-    @PutMapping("/upd/{id}")
+    @PutMapping("/{id}")
     private ResponseEntity<?> upd(@RequestBody Department department,
                                   @PathVariable("id") int id) {
+        if(departmentService.findById(id)==null){
+            throw new ApiException(ErrorCode.Department_NOT_EXIST);
+        }
         department.setId(id);
         return JsonResponse.ok(departmentService.save(department));
     }
 
-    @DeleteMapping("/del/{id}")
+    @DeleteMapping("/{id}")
     private ResponseEntity<?> delete(@PathVariable("id") int id) {
+        if(departmentService.findById(id)==null){
+            throw new ApiException(ErrorCode.Department_NOT_EXIST);
+        }
         departmentService.delete(id);
         return JsonResponse.noContent();
     }

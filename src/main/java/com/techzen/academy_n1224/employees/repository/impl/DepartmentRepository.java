@@ -4,6 +4,9 @@ import com.techzen.academy_n1224.employees.model.Department;
 import com.techzen.academy_n1224.employees.model.Employee;
 import com.techzen.academy_n1224.employees.repository.IDepartmentRepository;
 import com.techzen.academy_n1224.test.model.Student;
+import com.techzen.academy_n1224.test.repository.impl.ConnectionUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -20,77 +23,64 @@ public class DepartmentRepository implements IDepartmentRepository {
 
 
     public List<?> getAll() {
-        List<Department> departments = new ArrayList<>();
+
+        Session session = ConnectionUtil.sessionFactory.openSession();
+        List<Department> departments = null;
         try {
-            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("SELECT * FROM department");
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                departments.add(Department.builder()
-                        .id(rs.getInt("id_department"))
-                        .name(rs.getString("name")).build());
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            departments = (List<Department>) session.createQuery("FROM Department  ")
+                    .uniqueResult();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
         }
         return departments;
     }
 
     public Department findById(int id) {
+        Session session = ConnectionUtil.sessionFactory.openSession();
+        Department department = null;
         try {
-            PreparedStatement ps = BaseRepository.getConnection().prepareStatement("SELECT *FROM department where id_department = ?");
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                return Department.builder()
-                        .id(rs.getInt("id_department"))
-                        .name(rs.getString("name"))
-                        .build();
-            }
-            ;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            department = (Department) session.createQuery("FROM Department WHERE id =:id ")
+                    .setParameter("id" ,id)
+                    .uniqueResult();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
         }
-        return null;
+        return department;
     }
 
     public Department save(Department department) {
-        if (findById(department.getId()) == null) {
-            try {
-                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("INSERT INTO department (name) values(?)", Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, department.getName());
-                ps.executeUpdate();
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    department.setId(rs.getInt(1));
+        try(Session session = ConnectionUtil.sessionFactory.openSession()){
+            Transaction transaction = session.beginTransaction();
+            try{
+                session.saveOrUpdate(department);
+                transaction.commit();
+            }catch (Exception e){
+                if(transaction!=null){
+                    transaction.rollback();
                 }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            try {
-                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("update  department set name=? where id_department=?");
-                ps.setString(1, department.getName());
-                ps.setInt(2, department.getId());
-                ps.executeUpdate();
-            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-        return null;
+        return department;
     }
 
     public Department delete(int id) {
         Department department = findById(id);
-        if (department != null) {
-            try {
-                PreparedStatement ps = BaseRepository.getConnection().prepareStatement("delete from department where id_department = ?");
-                ps.setInt(1, id);
-                ps.executeUpdate();
-            } catch (SQLException e) {
+        try(Session session = ConnectionUtil.sessionFactory.openSession()){
+            Transaction transaction = session.beginTransaction();
+            try{
+                session.saveOrUpdate(department);
+                transaction.commit();
+            }catch (Exception e){
+                if(transaction!=null){
+                    transaction.rollback();
+                }
                 throw new RuntimeException(e);
             }
-            return department;
         }
         return null;
     }
