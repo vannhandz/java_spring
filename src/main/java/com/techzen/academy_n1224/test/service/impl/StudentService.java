@@ -21,8 +21,8 @@ public class StudentService implements IStudentService {
     IStudentRepository studentRepository;
 
 
-    public List<Student> findByName(String name) {
-        return studentRepository.findByName(name);
+    public List<Student> findByName(String name,Double scoreAfter, Double scoreBefore) {
+        return studentRepository.findAttribute(name, scoreAfter, scoreBefore);
     }
 
     public Student findById( int id) {
@@ -30,11 +30,12 @@ public class StudentService implements IStudentService {
     }
 
     public Student create(Student student) {
-       return studentRepository.create(student);
+       return studentRepository.save(student);
     }
 
-    public Student delete(int id) {
-       return studentRepository.delete(id);
+
+    public void deleteById(int id) {
+        studentRepository.deleteById(id);
     }
 
 }

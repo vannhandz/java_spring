@@ -1,8 +1,6 @@
 package com.techzen.academy_n1224.test.controller;
 
-import com.techzen.academy_n1224.employees.en.ApiException;
-import com.techzen.academy_n1224.employees.en.ApiResponse;
-import com.techzen.academy_n1224.employees.en.ErrorCode;
+
 import com.techzen.academy_n1224.test.model.Student;
 import com.techzen.academy_n1224.test.service.IStudentService;
 import lombok.AccessLevel;
@@ -16,19 +14,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Scope("singleton")
-@RequestMapping("/student")
+    @RequestMapping("/student")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class StudentController {
 
     IStudentService studentService ;
 
     @GetMapping()
-    public ResponseEntity<?> getStudents(@RequestParam(defaultValue = "") String name) {
+    public ResponseEntity<?> getStudents(@RequestParam(defaultValue = "") String name,Double scoreAfter,Double scoreBefore) {
         if (name == null) {
             throw  new ApiException(ErrorCode.Employees_NOT_EXIST);
         }
         return ResponseEntity.ok(ApiResponse.builder().
-                data(studentService.findByName(name)).build());
+                data(studentService.findByName(name,scoreAfter,scoreBefore)).build());
     }
 
     @GetMapping("/{id}")
@@ -38,7 +36,7 @@ public class StudentController {
             throw  new ApiException(ErrorCode.Employees_NOT_EXIST);
         }
         return ResponseEntity.ok(ApiResponse.builder().
-                data(student).build());
+                data(studentService.findById(id)).build());
     }
 
     @PostMapping()
@@ -60,7 +58,10 @@ public class StudentController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Student> del(@PathVariable("id") int id) {
-        studentService.delete(id);
+        if(studentService.findById(id) == null) {
+            throw  new ApiException(ErrorCode.Employees_NOT_EXIST);
+        }
+        studentService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

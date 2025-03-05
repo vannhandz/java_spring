@@ -1,9 +1,9 @@
 package com.techzen.academy_n1224.test.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.*;
 
 @Getter
 @Setter
@@ -20,5 +20,5 @@ public class Student {
     private Double score;
 
     @ManyToOne
-    Clazz Clazz;
+    Clazz clazz;
 }
