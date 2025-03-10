@@ -1,7 +1,5 @@
-package com.techzen.academy_n1224.test.model;
+package com.techzen.academy_n1224.test.dto.clazz;
 
-
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,10 +10,8 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity
-public class Clazz {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+
+public class ClazzResponse {
+    int id;
     private String name;
 }

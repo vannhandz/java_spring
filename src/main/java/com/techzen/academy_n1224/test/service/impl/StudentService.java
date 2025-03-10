@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,15 +23,15 @@ public class StudentService implements IStudentService {
     IStudentRepository studentRepository;
 
 
-    public List<Student> findByName(String name,Double scoreAfter, Double scoreBefore) {
-        return studentRepository.findAttribute(name, scoreAfter, scoreBefore);
+    public Page<Student> findByName(String name, Double scoreAfter, Double scoreBefore, Pageable pageable) {
+        return studentRepository.findAttribute(name, scoreAfter, scoreBefore,pageable);
     }
 
     public Student findById( int id) {
        return studentRepository.findById(id);
     }
 
-    public Student create(Student student) {
+    public Student save(Student student) {
        return studentRepository.save(student);
     }
 

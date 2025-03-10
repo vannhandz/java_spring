@@ -1,4 +1,4 @@
-package com.techzen.academy_n1224.employees.en;
+package com.techzen.academy_n1224.test.en;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
