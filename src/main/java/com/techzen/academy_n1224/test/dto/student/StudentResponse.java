@@ -16,8 +16,8 @@ import lombok.experimental.FieldDefaults;
 public class StudentResponse {
 
     int id;
-    private String name;
-    private Double score;
+     String name;
+     Double score;
     ClazzResponse clazz;
 
 }

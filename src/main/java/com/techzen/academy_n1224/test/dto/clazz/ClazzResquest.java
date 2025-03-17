@@ -1,5 +1,6 @@
 package com.techzen.academy_n1224.test.dto.clazz;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
 public class ClazzResquest {
-    private int id;
-    private String name;
+    @NotNull(message = "phia chon lop")
+     Integer id;
+     String name;
 }

@@ -12,14 +12,20 @@ import com.techzen.academy_n1224.test.mapper.IStudentMapper;
 
 import com.techzen.academy_n1224.test.model.Student;
 import com.techzen.academy_n1224.test.service.IStudentService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.mapping.Map;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,7 +61,8 @@ public class StudentController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> add(@RequestBody StudentRequest studentRequest) {
+    public ResponseEntity<?> add(@Valid @RequestBody StudentRequest studentRequest ) {
+
         Student student = studentMapper.studentResquestToStudent(studentRequest);
 
         student = studentService.save(student);
